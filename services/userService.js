@@ -27,7 +27,13 @@ const login = async (email, password) => {
   return { statusCode: CODE.OK, token };
 };
 
+const getAllUsers = async () => {
+  const users = await User.findAll();
+  return { statusCode: CODE.OK, users };
+};
+
 module.exports = {
   createUser,
   login,
+  getAllUsers,
 };

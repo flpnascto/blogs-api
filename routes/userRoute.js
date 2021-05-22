@@ -2,7 +2,7 @@ const router = require('express').Router();
 const user = require('../controllers/userController');
 
 router.route('/')
-  .get()
+  .get(user.getAllUsers)
   .post(user.createUser)
   .put()
   .delete();
