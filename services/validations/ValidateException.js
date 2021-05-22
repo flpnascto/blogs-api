@@ -1,8 +1,8 @@
 const CODE = require('../../helper/statusCode');
 
-function ValidateException(message) {
+function ValidateException(message, statusCode = CODE.BAD_REQUEST) {
   const error = new Error(message);
-  error.statusCode = CODE.BAD_REQUEST;
+  error.statusCode = statusCode;
   return error;
 }
 
