@@ -32,8 +32,17 @@ const getAllUsers = async () => {
   return { statusCode: CODE.OK, users };
 };
 
+const getUserById = async (id) => {
+  const user = await User.findByPk(id);
+
+  if (!user) throw new ValidateException('User does not exist', CODE.NOTFOUND);
+
+  return { statusCode: CODE.OK, user };
+};
+
 module.exports = {
   createUser,
   login,
   getAllUsers,
+  getUserById,
 };
