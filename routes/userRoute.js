@@ -1,8 +1,9 @@
 const router = require('express').Router();
 const user = require('../controllers/userController');
+const auth = require('../controllers/authController');
 
 router.route('/')
-  .get(user.getAllUsers)
+  .get(auth, user.getAllUsers)
   .post(user.createUser)
   .put()
   .delete();

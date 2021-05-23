@@ -17,6 +17,16 @@ const generateToken = (username) => {
   return jwt.sign(payload, SECRET, jwtConfig);
 };
 
+const verifyToken = (token) => {
+  try {
+    const payload = jwt.verify(token, SECRET);
+    return { payload };
+  } catch (error) {
+    return { error };
+  }
+};
+
 module.exports = {
   generateToken,
+  verifyToken,
 };
