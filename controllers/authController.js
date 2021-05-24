@@ -5,7 +5,7 @@ module.exports = async (req, res, next) => {
 
   try {
     const payload = await auth(token);
-    res.locals.email = payload.email;
+    res.locals.email = payload.username;
   } catch (error) {
     next(error);
   }

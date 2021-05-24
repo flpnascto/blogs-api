@@ -1,8 +1,10 @@
 const router = require('express').Router();
+const blogPost = require('../controllers/blogPostController');
+const auth = require('../controllers/authController');
 
 router.route('/')
   .get()
-  .post()
+  .post(auth, blogPost.addBlogPost)
   .put()
   .delete();
 
