@@ -7,6 +7,7 @@ const addBlogPost = async (req, res, next) => {
   try {
     const { statusCode, newBlogPost } = await BlogPost
       .addBlogPost(email, title, content, categoryIds);
+    ['published', 'updated'].forEach((e) => delete newBlogPost.dataValues[e]);
     res.status(statusCode).json(newBlogPost);
   } catch (error) {
     next(error);
