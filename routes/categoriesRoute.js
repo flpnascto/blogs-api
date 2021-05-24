@@ -3,7 +3,7 @@ const category = require('../controllers/categoryController');
 const auth = require('../controllers/authController');
 
 router.route('/')
-  .get()
+  .get(auth, category.getAllCategories)
   .post(auth, category.createCategory)
   .put()
   .delete();
