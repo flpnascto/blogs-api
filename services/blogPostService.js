@@ -64,7 +64,22 @@ const getAllBlogPost = async () => {
   return { statusCode: CODE.OK, blogPosts };
 };
 
+const getBlogPostById = async (id) => {
+  const blogPosts = await BlogPost.findAll({
+    where: { id },
+    include: [
+      { model: User, as: 'user' },
+      { model: Category, as: 'categories', through: { attributes: [] } },
+    ],
+
+  });
+  if (blogPosts.length < 1) throw new ValidateException('Post does not exist', CODE.NOTFOUND);
+  const blogPost = blogPosts[0];
+  return { statusCode: CODE.OK, blogPost };
+};
+
 module.exports = {
   addBlogPost,
   getAllBlogPost,
+  getBlogPostById,
 };

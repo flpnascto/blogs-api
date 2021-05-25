@@ -23,7 +23,18 @@ const getAllBlogPost = async (_req, res, next) => {
   }
 };
 
+const getBlogPostById = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const { statusCode, blogPost } = await BlogPost.getBlogPostById(id);
+    res.status(statusCode).json(blogPost);
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   addBlogPost,
   getAllBlogPost,
+  getBlogPostById,
 };

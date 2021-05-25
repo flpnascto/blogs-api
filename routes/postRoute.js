@@ -9,7 +9,7 @@ router.route('/')
   .delete();
 
 router.route('/:id')
-  .get()
+  .get(auth, blogPost.getBlogPostById)
   .post()
   .put()
   .delete();
