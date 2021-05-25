@@ -18,6 +18,6 @@ router.route('/me')
   .get()
   .post()
   .put()
-  .delete();
+  .delete(auth, user.removeUser);
 
 module.exports = router;

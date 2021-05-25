@@ -33,8 +33,20 @@ const getUserById = async (req, res, next) => {
   }
 };
 
+const removeUser = async (req, res, next) => {
+  const { email } = res.locals;
+
+  try {
+    const { statusCode } = await User.removeUser(email);
+    res.status(statusCode).send();
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   createUser,
   getAllUsers,
   getUserById,
+  removeUser,
 };

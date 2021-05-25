@@ -40,9 +40,18 @@ const getUserById = async (id) => {
   return { statusCode: CODE.OK, user };
 };
 
+const removeUser = async (email) => {
+  const { id } = await User.findOne({ where: { email } });
+
+  await User.destroy({ where: { id } });
+
+  return { statusCode: CODE.NO_CONTENT };
+};
+
 module.exports = {
   createUser,
   login,
   getAllUsers,
   getUserById,
+  removeUser,
 };
