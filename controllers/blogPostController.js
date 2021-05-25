@@ -33,8 +33,22 @@ const getBlogPostById = async (req, res, next) => {
   }
 };
 
+const updateBlogPost = async (req, res, next) => {
+  const { email } = res.locals;
+  const dataPost = req.body;
+  const { id } = req.params;
+  try {
+    const { statusCode, updatePost } = await BlogPost.updateBlogPost(email, dataPost, id);
+    ['published', 'updated'].forEach((e) => delete updatePost[0].dataValues[e]);
+    res.status(statusCode).json(updatePost[0]);
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   addBlogPost,
   getAllBlogPost,
   getBlogPostById,
+  updateBlogPost,
 };

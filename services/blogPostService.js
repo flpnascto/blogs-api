@@ -71,15 +71,46 @@ const getBlogPostById = async (id) => {
       { model: User, as: 'user' },
       { model: Category, as: 'categories', through: { attributes: [] } },
     ],
-
   });
   if (blogPosts.length < 1) throw new ValidateException('Post does not exist', CODE.NOTFOUND);
   const blogPost = blogPosts[0];
   return { statusCode: CODE.OK, blogPost };
 };
 
+const authValidateUser = async (email, postId) => {
+  const id = await getUserId(email);
+  const { userId } = await BlogPost.findByPk(postId);
+  return (userId === id);
+};
+
+const updateBlogPost = async (email, dataPost, postId) => {
+  if (dataPost.categoryIds) throw new ValidateException('Categories cannot be edited');
+
+  const { title, content } = dataPost;
+  const { error } = validations.dataUpdatePost({ title, content });
+  if (error) throw new ValidateException(error.message);
+
+  const authUser = await authValidateUser(email, postId);
+  if (!authUser) throw new ValidateException('Unauthorized user', CODE.UNAUTHORIZED);
+
+  await BlogPost.update(
+    { title, content, updated: new Date() },
+    { where: { id: postId }, returning: true, plain: true },
+  );
+
+  const updatePost = await BlogPost.findAll({
+    where: { id: postId },
+    include: [
+      { model: Category, as: 'categories', through: { attributes: [] } },
+    ],
+  });
+
+  return { statusCode: CODE.OK, updatePost };
+};
+
 module.exports = {
   addBlogPost,
   getAllBlogPost,
   getBlogPostById,
+  updateBlogPost,
 };

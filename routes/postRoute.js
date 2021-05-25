@@ -11,7 +11,7 @@ router.route('/')
 router.route('/:id')
   .get(auth, blogPost.getBlogPostById)
   .post()
-  .put()
+  .put(auth, blogPost.updateBlogPost)
   .delete();
 
 router.route('/search')
