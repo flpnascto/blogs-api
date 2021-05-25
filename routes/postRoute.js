@@ -12,7 +12,7 @@ router.route('/:id')
   .get(auth, blogPost.getBlogPostById)
   .post()
   .put(auth, blogPost.updateBlogPost)
-  .delete();
+  .delete(auth, blogPost.removeBlogPost);
 
 router.route('/search')
   .get()

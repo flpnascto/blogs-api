@@ -46,9 +46,22 @@ const updateBlogPost = async (req, res, next) => {
   }
 };
 
+const removeBlogPost = async (req, res, next) => {
+  const { email } = res.locals;
+  const { id } = req.params;
+
+  try {
+    const { statusCode } = await BlogPost.removeBlogPost(email, id);
+    res.status(statusCode).send();
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   addBlogPost,
   getAllBlogPost,
   getBlogPostById,
   updateBlogPost,
+  removeBlogPost,
 };

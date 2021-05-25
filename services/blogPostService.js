@@ -79,8 +79,12 @@ const getBlogPostById = async (id) => {
 
 const authValidateUser = async (email, postId) => {
   const id = await getUserId(email);
-  const { userId } = await BlogPost.findByPk(postId);
-  return (userId === id);
+
+  const post = await BlogPost.findOne({ where: { id: postId } });
+  if (post === null) throw new ValidateException('Post does not exist', CODE.NOTFOUND);
+
+  const { userId } = post;
+  if (userId !== id) throw new ValidateException('Unauthorized user', CODE.UNAUTHORIZED);
 };
 
 const updateBlogPost = async (email, dataPost, postId) => {
@@ -90,8 +94,7 @@ const updateBlogPost = async (email, dataPost, postId) => {
   const { error } = validations.dataUpdatePost({ title, content });
   if (error) throw new ValidateException(error.message);
 
-  const authUser = await authValidateUser(email, postId);
-  if (!authUser) throw new ValidateException('Unauthorized user', CODE.UNAUTHORIZED);
+  await authValidateUser(email, postId);
 
   await BlogPost.update(
     { title, content, updated: new Date() },
@@ -108,9 +111,17 @@ const updateBlogPost = async (email, dataPost, postId) => {
   return { statusCode: CODE.OK, updatePost };
 };
 
+const removeBlogPost = async (email, postId) => {
+  await authValidateUser(email, postId);
+  await BlogPost.destroy({ where: { id: postId } });
+
+  return { statusCode: CODE.NO_CONTENT };
+};
+
 module.exports = {
   addBlogPost,
   getAllBlogPost,
   getBlogPostById,
   updateBlogPost,
+  removeBlogPost,
 };
