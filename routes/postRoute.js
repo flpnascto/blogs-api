@@ -3,7 +3,7 @@ const blogPost = require('../controllers/blogPostController');
 const auth = require('../controllers/authController');
 
 router.route('/')
-  .get()
+  .get(auth, blogPost.getAllBlogPost)
   .post(auth, blogPost.addBlogPost)
   .put()
   .delete();

@@ -53,6 +53,18 @@ const addBlogPost = async (email, title, content, categoryIds) => {
   return { statusCode: CODE.CREATED, newBlogPost };
 };
 
+const getAllBlogPost = async () => {
+  const blogPosts = await BlogPost.findAll({
+    include: [
+      { model: User, as: 'user' },
+      { model: Category, as: 'categories', through: { attributes: [] } },
+    ],
+
+  });
+  return { statusCode: CODE.OK, blogPosts };
+};
+
 module.exports = {
   addBlogPost,
+  getAllBlogPost,
 };
